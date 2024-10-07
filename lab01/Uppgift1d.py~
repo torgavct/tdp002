@@ -1,0 +1,20 @@
+# Uppgift D
+
+sum = 0
+
+def isPrime(n,i):
+    if n % i == 0 and n != i:
+        return False
+    elif n == i:
+        return True
+
+for n in range (2,1001):
+    is_Prime = True
+    for i in range(2,n):
+        if n % i == 0:
+            is_Prime = False
+            break
+
+    if is_Prime:
+        sum += n
+        print(sum)

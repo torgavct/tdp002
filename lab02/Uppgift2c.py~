@@ -1,0 +1,62 @@
+#uppgift 2c
+
+def program():
+    print("\nVälkommen till shoppinglistan, välj ett alternativ:")
+    shoppingList = ["Book", "Väska","Glock"]
+    while True:
+        print("1. Skriv ut en existerande lista")
+        print("2. Lägg till ett föremål i listan")
+        print ("3. Ta bort ett föremål ur listan")
+        print("4. Ändra ett föremål i listan")
+        print("5. Avsluta")
+
+        userInput = int(input("val: "))
+        print("")
+        if userInput == 1:
+            shopping_list(shoppingList)
+            
+        elif userInput == 2:
+             shopping_add(shoppingList)
+        elif userInput == 3:
+            shopping_remove(shoppingList)
+        elif userInput == 4:
+            shopping_edit(shoppingList)
+        elif userInput == 5:
+            exit()
+        else:
+            print("Du GAV EN FEL INPUT")
+
+    
+
+
+
+
+def shopping_list(userList):
+    x = 1
+    for i in userList:
+        print(x,". ",i)
+        x += 1
+    print("")
+    
+def shopping_add(userList):
+    object = str(input("Vad vill du lägga till i listan? "))
+    userList.append(object)
+   
+
+def shopping_remove(userList):
+    itemIndex = int(input("Vad vill du ta bort: "))
+    itemIndex -= 1
+    userList.pop(itemIndex)
+   
+def shopping_edit(userList):
+    itemChange = int(input("Vilken sak vill du ändra på? "))
+    itemChange -= 1
+
+    print("Vad ska det stå istället för",userList[itemChange], "? ", end = "")
+    newItem = str(input())
+    userList[itemChange] = newItem
+    print("")
+
+if __name__ == "__main__":
+    program()
+        

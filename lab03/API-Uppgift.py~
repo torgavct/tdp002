@@ -1,0 +1,55 @@
+#API
+import requests
+
+def request(url): #Hämta all data
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        main()
+
+def find_pokemon(poke_name, data, url):
+    for poke_index in range(data["count"]):
+        name = data["results"][poke_index]["name"]
+        if name == poke_name:
+            return poke_index
+        
+def get_ability(poke_name, poke_index, url):
+    poke_index += 1
+    url += "/"+str(poke_index)+"/"
+    ability_data = request(url)
+    i = 0
+    print("\n"+poke_name, "has",len(ability_data["abilities"]), "abilities.")
+    
+    while i < len(ability_data["abilities"]):
+        move = ability_data["abilities"][i]["ability"]["name"]
+        print("\nAbility '"+move+"':")
+        new_url = ability_data["abilities"][i]["ability"]["url"]
+        original_url = url[38:]
+        url = url.replace(original_url, new_url)
+        ability_text(url)
+        i += 1
+    print("")
+
+def ability_text(url):
+    
+    effect_dic = request(url)
+    ability_desc = effect_dic["effect_entries"][0]["short_effect"]
+    print(ability_desc)
+        
+            
+def main():
+    url = "https://www.ida.liu.se/~TDP002/pokeapi/api/v2/pokemon"
+    data = request(url)
+    while True:
+        try:
+            poke_name = str(input("Enter a Pokémon name: "))
+            poke_index = find_pokemon(poke_name, data, url)
+            get_ability(poke_name, poke_index, url)
+        except:
+            print("\nPlease Try Again!\n")
+
+if __name__ == "__main__":
+    main()
+  

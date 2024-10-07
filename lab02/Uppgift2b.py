@@ -1,0 +1,32 @@
+#Uppgift 2b
+
+def create_shopping_list():
+    shoppingList = []
+
+def shopping_list(userList):
+    x = 1
+    for i in userList:
+        print(x,". ",i)
+        x += 1
+    
+def shopping_add(userList):
+    object = str(input("Vad vill du lägga till i listan?: "))
+    userList.append(object)
+
+def shopping_remove(userList):
+    itemIndex = int(input("Vad vill du ta bort?: "))
+    itemIndex -= 1
+    
+    userList.pop(itemIndex)
+   
+
+    
+def shopping_edit(userList):
+    itemChange = int(input("Vad för sak vill du ta bort?: "))
+    itemChange -= 1
+    
+    newItem = str(input("Vad vill du lägga till?: "))
+    userList[itemChange] = newItem
+    
+    
+    
