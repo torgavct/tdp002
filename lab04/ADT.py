@@ -8,7 +8,7 @@ def create_deck():
     return deck
    
 def shuffle_deck(deck):
-    random.Random(3).shuffle(deck)
+    random.Random(13).shuffle(deck)
     return deck
 
 def move_joker_a(deck):
@@ -55,4 +55,13 @@ def move(deck):
     deck[27:27] = moving_cards
     for i in range(len(moving_cards)):
         deck.pop(0)
+
+def get_top_card(deck):
+    upper_card_value = deck[0]
+    NOT_FALSE = True
+    while NOT_FALSE:
+        card_value = deck[(upper_card_value-1)]
+        if card_value <= 26:
+            return card_value
+        else:break
 

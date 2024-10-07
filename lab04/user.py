@@ -8,15 +8,8 @@ def keystream(deck, length):
         ADT.move_joker_b(deck)
         ADT.split_deck(deck)
         ADT.move(deck)
-        upper_card_value = deck[0]
-        NOT_FALSE = True
-
-        while NOT_FALSE:
-            card_value = deck[(upper_card_value-1)]
-            if card_value <= 26:
-                letter += (chr(card_value + 64))
-                NOT_FALSE = False
-            else:break
+        card_value = ADT.get_top_card(deck)
+        letter += (chr(card_value + 64))
     return letter
 
 def kryptera(message, deck):
