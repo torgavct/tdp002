@@ -8,8 +8,8 @@ def keystream(deck, length):
         ADT.move_joker_b(deck)
         ADT.split_deck(deck)
         ADT.move(deck)
-        card_value = ADT.get_top_card(deck)
-        letter += (chr(card_value + 64))
+        card = ADT.create_pattern(deck) 
+        letter += (chr(card + 64))
     return letter
 
 def kryptera(message, deck):
