@@ -1,4 +1,5 @@
 import ADT
+import random
 
 def keystream(deck, length):
     letter = ""

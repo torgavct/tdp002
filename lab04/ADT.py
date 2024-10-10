@@ -75,3 +75,23 @@ def create_pattern(deck):
             return card_value
         else:break
     
+def split(deck, index):
+    half1 = []
+    half2 = []
+    half1 = deck[:index]
+    half2 = deck[index:]
+    deck = half2 + half1
+    return deck
+    
+def kupera(deck):
+    new_deck = []
+    half1 = []
+    half2 = []
+    half1 = deck[:14]
+    half2 = deck[14:]
+    print(half1)
+    print(half2)
+    for i in range(len(half1)):
+        new_deck.append(half1[i])
+        new_deck.append(half2[i])
+    return new_deck
