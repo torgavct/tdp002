@@ -15,6 +15,13 @@ def kryptera(message, deck):
     conv_text = []
     conv_nyckelfras = []
     secret_message = ""
+    check_message = ""
+    for i in message:
+        if not i.isalpha():
+            continue
+        check_message += i
+    message = check_message
+  
     message = message.upper()
     length = len(message)
     nyckelfras = keystream(deck, (len(message)))
@@ -32,7 +39,7 @@ def kryptera(message, deck):
             res -= 26
         secret_message += (chr(res + 64))
     return secret_message
-   
+
 def dekryptera(message, deck):
     conv_message = []
     conv_nyckelfras = []
@@ -55,6 +62,6 @@ def dekryptera(message, deck):
 deck1 = ADT.create_deck()
 deck2 = ADT.create_deck()
 
-secret = kryptera("pythont", deck1)
+secret = kryptera("HeJ SVEJ", deck1)
 print("Krypterad nyckel: ",secret)
 print("Dekrypterad: ",dekryptera(secret, deck2))

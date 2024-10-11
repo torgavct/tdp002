@@ -8,7 +8,7 @@ def create_deck():
     return deck
    
 def shuffle_deck(deck):
-    random.Random(15).shuffle(deck)
+    random.Random(14).shuffle(deck)
     return deck
 
 def move_joker_a(deck):
