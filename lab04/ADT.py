@@ -8,7 +8,7 @@ def create_deck():
     return deck
    
 def shuffle_deck(deck):
-    random.Random(13).shuffle(deck)
+    random.Random(15).shuffle(deck)
     return deck
 
 def move_joker_a(deck):
@@ -64,16 +64,24 @@ def get_top_card(deck):
 def get_last_card(deck):
     bottom_card = deck[(len(deck)-1)]
     return bottom_card
+
         
+def create_pattern(deck, length):
+    letter = ""
+    while len(letter) < length:
         
-def create_pattern(deck):
-    top_card = get_top_card(deck)
-    NOT_FALSE = True
-    while NOT_FALSE:
-        card_value = deck[(top_card-1)]
-        if card_value <= 26:
-            return card_value
-        else:break
+        top_card = get_top_card(deck)
+        NOT_FALSE = True
+        while NOT_FALSE:
+            
+            card_value = deck[(top_card-1)]
+            if card_value <= 26:
+                letter += (chr(card_value + 64))
+                break
+            else:break
+    
+    return letter
+    
     
 def split(deck, index):
     half1 = []

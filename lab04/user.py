@@ -1,16 +1,14 @@
 import ADT
-import random
+
 
 def keystream(deck, length):
     letter = ""
-    while len(letter) < length:
-        ADT.shuffle_deck(deck)
-        ADT.move_joker_a(deck)
-        ADT.move_joker_b(deck)
-        ADT.split_deck(deck)
-        ADT.move(deck)
-        card = ADT.create_pattern(deck) 
-        letter += (chr(card + 64))
+    ADT.shuffle_deck(deck)
+    ADT.move_joker_a(deck)
+    ADT.move_joker_b(deck)
+    ADT.split_deck(deck)
+    ADT.move(deck)
+    letter = ADT.create_pattern(deck, length) 
     return letter
 
 def kryptera(message, deck):
@@ -57,6 +55,6 @@ def dekryptera(message, deck):
 deck1 = ADT.create_deck()
 deck2 = ADT.create_deck()
 
-secret = kryptera("Hejsan", deck1)
+secret = kryptera("pythont", deck1)
 print("Krypterad nyckel: ",secret)
 print("Dekrypterad: ",dekryptera(secret, deck2))
