@@ -57,77 +57,99 @@ def get_object(board,x,y):
     
     return board
 
-def player_input(board, input):
+def user_input(board, input):
     if input.lower() == 'w':
-        move_player(0,-1, board) 
+        check_move(0,-1, board) 
     elif input.lower() == 'a':
-        move_player(-1,0,board)   
+        check_move(-1,0,board)   
     elif input.lower() == 's':
-        move_player(0,1,board)
+        check_move(0,1,board)
     elif input.lower() == 'd':
-        move_player(1,0,board)    
+        check_move(1,0,board)    
+    return board
 
-def move_player(x, y, board):
-    current_position = get_player_pos(board)
-    future_x = current_position[1]+x
-    future_y = current_position[2]+y  
-    next_position = get_object(board, future_x, future_y)
+def check_move(move_x,move_y, board):
+    player_position = get_player_pos(board)
+    next_x = player_position[1] + move_x
+    next_y = player_position[2] + move_y
+    next_position = get_object(board, next_x, next_y)
     
     if next_position[0] == ' ':
-        replace_object(board, current_position[1], current_position[2])
-        remove_object(board,future_x , future_y)
-        add_player(board, future_x, future_y)
+        move_player(board, next_position)
+        return board
+    
+    elif next_position[0] == '#':
         return board
     
     elif next_position[0] == 'o':
-        next_box_pos = get_object(board, next_position[1]+x, next_position[2]+y)
-        if next_box_pos[0] == ' ':
-            replace_object(board, next_position[1], next_position[2])
-            remove_object(board,next_box_pos[1], next_box_pos[2])
-            add_box(board, next_box_pos[1], next_box_pos[2])
-            
-            replace_object(board, current_position[1], current_position[2])
-            remove_object(board,future_x , future_y)
-            add_player(board, future_x, future_y)
-        elif next_box_pos[0] == '.':
-            replace_object(board, next_position[1], next_position[2])
-            remove_object(board,next_box_pos[1], next_box_pos[2])
-            add_box_on_storage(board, next_box_pos[1], next_box_pos[2])
-            
-            replace_object(board, current_position[1], current_position[2])
-            remove_object(board,future_x , future_y)
-            add_player(board, future_x, future_y)
+        move_box(board, next_position, move_x, move_y)
+        return board
     
-    elif  next_position[0] == '*':     
-            
-      
-        return board 
-        
+    elif next_position[0] == '*':
+        move_box(board, next_position, move_x, move_y)
         return board
     
     elif next_position[0] == '.':
-        replace_object(board, current_position[1], current_position[2])
-        remove_object(board,future_x , future_y)
-        add_player_on_storage(board, future_x, future_y)
-        return board 
+        move_player(board, next_position)
+        return board
+    
+    return board
+
+def move_player(board, next_position):
+    player_position = get_player_pos(board)
+    if player_position[0] == '+':
+        replace_object(board, player_position, '.')
+    else:
+        replace_object(board, player_position, ' ')     
+    
+    remove_object(board,  next_position[1], next_position[2])
+    if next_position[0] == ' ':
+        add_player(board, next_position[1], next_position[2])
+    elif next_position[0] == '.':
+        add_player_on_storage(board, next_position[1], next_position[2])
+    return board
+
+
+def move_box(board, box_position , move_x, move_y):
+    next_x = box_position[1] + move_x
+    next_y = box_position[2] + move_y
+    next_position = get_object(board, next_x, next_y)
+       
+    
+    if next_position[0] == ' ':
+        add_box(board,  next_position[1], next_position[2])
+        
+    elif next_position[0] == '.':
+        add_box_on_storage(board,  next_position[1], next_position[2])
+       
+    elif next_position[0] == 'o':
+        return board
+    
+    elif next_position[0] == '#':
+        return board
+    
+    remove_object(board,  next_position[1], next_position[2])
+    if box_position[0] == '*':
+        replace_object(board, box_position, '.')
+    else:
+        replace_object(board, box_position, ' ')  
+        
+   
+    move_player(board, box_position)
+    return board
+
 
 def get_player_pos(board):
     for object in board:
         if object[0] == '@' or object[0] == '+':
             return object
     print("NO PLAYER FOUND")
+    return None
 
-def replace_object(board, x, y):
-    for index in range(len(board)+1):
-        object = board[index]
-        if object[1] == x and object[2] == y:
-            if object[0] == '+':
-                object[0] = '.'
-            elif object[0] == '*':
-                object[0] = '.'
-            else:
-                object[0] = ' '
-            return board
+def replace_object(board, object, replace):
+    for matching_object in board:
+        if matching_object[1] == object[1] and matching_object[2] == object[2]:
+            matching_object[0] = replace
     return board
 
 def remove_object(board, x, y):
@@ -138,5 +160,11 @@ def remove_object(board, x, y):
             return board
     return board
 
-def move_box(board):
-    pass
+def check_win(board, file):
+    marked_spots = 0
+    for object in board:
+        if object[0] == '.':
+            marked_spots += 1
+    if marked_spots == 0:
+        return False
+    return True
