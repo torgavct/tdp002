@@ -64,18 +64,32 @@ def player_input(board, input):
 def move_player(x, y, board):
     current_position = get_player_pos(board)
     future_x = current_position[1]+x
-    future_y = current_position[2]+y
-    print("here")
+    future_y = current_position[2]+y  
     next_position = get_object(board, future_x, future_y)
-    print(next_position)
     
     if next_position[0] == '?':
-        print("here")
-        
-    
-        remove_item(board, current_position[1], current_position[2])
+        replace_object(board, current_position[1], current_position[2])
+        remove_object(board,future_x , future_y)
         add_player(board, future_x, future_y)
-    return board
+        return board
+    
+    elif next_position[0] == '0':
+        next_box_pos = get_object(board, next_position[1]+x, next_position[2]+y)
+        if next_box_pos[0] == '?':
+            replace_object(board, next_position[1], next_position[2])
+            remove_object(board,next_box_pos[1], next_box_pos[2])
+            add_box(board, next_box_pos[1], next_box_pos[2])
+            replace_object(board, current_position[1], current_position[2])
+            remove_object(board,future_x , future_y)
+            add_player(board, future_x, future_y)
+            return board 
+        elif next_box_pos[0] == '.':
+            pass
+        return board
+    elif next_position[0] == '.':
+        pass
+
+
 
 def get_player_pos(board):
     for object in board:
@@ -83,11 +97,21 @@ def get_player_pos(board):
             return object
     print("NO PLAYER FOUND")
 
-def remove_item(board, x, y):
+def replace_object(board, x, y):
     for index in range(len(board)+1):
         object = board[index]
         if object[1] == x and object[2] == y:
-            board.index(object)
-            board.pop()
+            object[0] = '?'
             return board
     return board
+
+def remove_object(board, x, y):
+    for object in board:
+        if object[1] == x and object[2] == y:
+            index = board.index(object)
+            board.pop(index)
+            return board
+    return board
+
+def move_box(board):
+    pass

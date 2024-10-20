@@ -3,6 +3,7 @@ from time import sleep
 from adt import *
 
 def sokoban_display(board):
+    os.system('clear')
     data = board_data(board)
     for y in range(get_max(board, 'y')):
         for x in range(get_max(board, 'x')):
@@ -13,14 +14,15 @@ def sokoban_display(board):
                     continue
         print()
       
+def sokoban_load():
+    pass
         
 
 def play(): 
     board = create_board()    
     add_player(board, 0, 0)      
+    add_box(board,1,1)
     add_space(board, 2, 2)
-    
-    
     while True:   
         sokoban_display(board)
         user_input = input(" ")
