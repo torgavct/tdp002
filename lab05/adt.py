@@ -1,3 +1,4 @@
+#adt.py
 import os
 
 def create_board():
@@ -18,16 +19,19 @@ def add_storage(board,x,y):
     board.append(['.',x,y])
 
 def add_space(board,x,y):
-    board.append([' ',x,y])
+    board.append(['?',x,y])
 
-def get_position(board,x,y):
-    data = board_data(board)
-    iteration = 0
-    for i in range(0,len(data),get_max(board,'x')):
-        chunk = data[i:i+get_max(board,'y')]
-        if iteration == y:
-            return chunk[x]
-        iteration+=1
+def board_data(board):
+    for y in range(get_max(board, 'y')):
+        for x in range(get_max(board, 'x')):
+            add = True
+            new_object = ['?', x, y]
+            for object in board:
+                if new_object[1]==object[1] and new_object[2] == object[2]:
+                    add = False
+            if add:       
+                board.append(new_object)  
+    return board
 
 def get_max(board, n):
     if n == 'x': n = 1
@@ -40,65 +44,50 @@ def get_max(board, n):
     max_n += n_values[len(n_values)-1]+1
     return max_n
 
-def board_data(board):
-    data = []
-    row = 0
-    small_list = []
-    while row < get_max(board, 'y'):
-        for i in range(get_max(board,'y')): 
-            small_list.append(' ')
-        for object in board:
-            if object[2] == row:
-                small_list[object[1]] = object[0]
-        row+=1
-        data = data + small_list
-        small_list.clear()
-    return data
-
-def move_box(board, x, y):
-    print("move box")
-    pass
-
-def player_direction(board, dir):
-    if dir.lower() == 'w':
-        move(0,-1, board)
-           
-    elif dir.lower() == 'a':
-        move(-1,0,board)
-            
-    elif dir.lower() == 's':
-        move(0,1,board)
-            
-    elif dir.lower() == 'd':
-        move(1,0,board)
-           
+def get_object(board,x,y):
+    for object in board:
+        if object[1] == x and object[2] == y:
+            return object
     
-def move(dir_x, dir_y, board):
-    player = player_pos(board)
-    new_x = player[1]+dir_x
-    new_y = player[2]+dir_y
-    try:
-        new_pos = get_position(board,new_x,new_y)
-    except:
-        return board
-    if new_pos == ' ':
-        remove_item(board, player[1], player[2])
-        add_player(board,new_x,new_y)
-        return board
-    elif new_pos == '0':
-        move_box(board,)
     return board
 
-def player_pos(board):
+def player_input(board, input):
+    if input.lower() == 'w':
+        move_player(0,-1, board) 
+    elif input.lower() == 'a':
+        move_player(-1,0,board)   
+    elif input.lower() == 's':
+        move_player(0,1,board)
+    elif input.lower() == 'd':
+        move_player(1,0,board)    
+
+def move_player(x, y, board):
+    current_position = get_player_pos(board)
+    future_x = current_position[1]+x
+    future_y = current_position[2]+y
+    print("here")
+    next_position = get_object(board, future_x, future_y)
+    print(next_position)
+    
+    if next_position[0] == '?':
+        print("here")
+        
+    
+        remove_item(board, current_position[1], current_position[2])
+        add_player(board, future_x, future_y)
+    return board
+
+def get_player_pos(board):
     for object in board:
         if object[0] == '@':
             return object
     print("NO PLAYER FOUND")
 
 def remove_item(board, x, y):
-    for index in board:
-        if index[1] == x and index[2] == y:
-            item = board.index(index)
-            board.pop(item)
+    for index in range(len(board)+1):
+        object = board[index]
+        if object[1] == x and object[2] == y:
+            board.index(object)
+            board.pop()
             return board
-    
+    return board
