@@ -3,7 +3,7 @@ from time import sleep
 from adt import *
 
 def sokoban_display(board):
-    
+    os.system('clear')
     data = board_data(board)
     for y in range(get_max(board, 'y')):
         for x in range(get_max(board, 'x')):
@@ -46,7 +46,6 @@ def menu():
             user_in = int(input("Chosse: "))
             if user_in == 1:
                 sokoban_load(file1,board)
-                print(board)
                 play(board, file1)
                 os.system('clear')
             elif user_in == 2:
