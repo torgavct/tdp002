@@ -1,6 +1,7 @@
 #adt.py
 import os
 
+
 def create_board():
     return []
     
@@ -59,49 +60,32 @@ def get_object(board,x,y):
 
 def user_input(board, input):
     if input.lower() == 'w':
-        check_move(0,-1, board) 
+        available = player_can_move(0,-1, board)
+        if available:
+            move_player(0,-1,board)
     elif input.lower() == 'a':
-        check_move(-1,0,board)   
+        available = player_can_move(-1,0, board)
+        if available:
+            move_player(-1,0,board)
     elif input.lower() == 's':
-        check_move(0,1,board)
+        available = player_can_move(0,1, board)
+        if available:
+            move_player(0,1,board)
     elif input.lower() == 'd':
-        check_move(1,0,board)    
+        available = player_can_move(1,0, board)
+        if available:
+            move_player(1,0,board)
     return board
 
-def check_move(move_x,move_y, board):
+def move_player(x, y, board):
     player_position = get_player_pos(board)
-    next_x = player_position[1] + move_x
-    next_y = player_position[2] + move_y
+    next_x = player_position[1] + x
+    next_y = player_position[2] + y
     next_position = get_object(board, next_x, next_y)
-    
-    if next_position[0] == ' ':
-        move_player(board, next_position)
-        return board
-    
-    elif next_position[0] == '#':
-        return board
-    
-    elif next_position[0] == 'o':
-        move_box(board, next_position, move_x, move_y)
-        return board
-    
-    elif next_position[0] == '*':
-        move_box(board, next_position, move_x, move_y)
-        return board
-    
-    elif next_position[0] == '.':
-        move_player(board, next_position)
-        return board
-    
-    return board
-
-def move_player(board, next_position):
-    player_position = get_player_pos(board)
     if player_position[0] == '+':
         replace_object(board, player_position, '.')
     else:
         replace_object(board, player_position, ' ')     
-    
     remove_object(board,  next_position[1], next_position[2])
     if next_position[0] == ' ':
         add_player(board, next_position[1], next_position[2])
@@ -110,32 +94,19 @@ def move_player(board, next_position):
     return board
 
 
-def move_box(board, box_position , move_x, move_y):
+def move_box(board, box_position,move_x, move_y):
     next_x = box_position[1] + move_x
     next_y = box_position[2] + move_y
     next_position = get_object(board, next_x, next_y)
-       
-    
-    if next_position[0] == ' ':
-        add_box(board,  next_position[1], next_position[2])
-        
-    elif next_position[0] == '.':
-        add_box_on_storage(board,  next_position[1], next_position[2])
-       
-    elif next_position[0] == 'o':
-        return board
-    
-    elif next_position[0] == '#':
-        return board
-    
     remove_object(board,  next_position[1], next_position[2])
     if box_position[0] == '*':
         replace_object(board, box_position, '.')
     else:
         replace_object(board, box_position, ' ')  
-        
-   
-    move_player(board, box_position)
+    if next_position[0] == ' ':
+        add_box(board, next_position[1], next_position[2])
+    elif next_position[0] == '.':
+        add_box_on_storage(board, next_position[1], next_position[2])
     return board
 
 
@@ -168,3 +139,34 @@ def check_win(board, file):
     if marked_spots == 0:
         return False
     return True
+
+
+def player_can_move(x, y, board):
+    player_position = get_player_pos(board)
+    next_x = player_position[1] + x
+    next_y = player_position[2] + y
+    next_position = get_object(board, next_x, next_y)
+    if next_position[0] == ' ': return True
+    elif next_position[0] == '#': return False
+    elif next_position[0] == 'o':
+        move = box_can_move(next_position,x, y, board)
+        if move:
+            move_box(board,next_position,x,y)
+            return True
+    elif next_position[0] == '*':
+        move = box_can_move(next_position,x, y, board)
+        if move:
+            move_box(board,next_position,x,y)
+            return True
+    elif next_position[0] == '.': return True
+    return False
+
+def box_can_move(box_position,x, y, board):
+    next_x = box_position[1] + x
+    next_y = box_position[2] + y
+    next_position = get_object(board, next_x, next_y)   
+    if next_position[0] == ' ':return True
+    elif next_position[0] == '.':return True
+    elif next_position[0] == 'o':return False
+    elif next_position[0] == '#':return False
+    return False
